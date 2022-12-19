@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _allTasks = <Task>[];
-    // _allTasks.add(Task.create(name: "Deneme", createdAt: DateTime.now()));
+    _allTasks.add(Task.create(name: "Deneme", createdAt: DateTime.now()));
 
     super.initState();
   }
@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
             width: MediaQuery.of(context).size.width,
             child: ListTile(
               title: TextField(
+                autofocus: true,
                 style: const TextStyle(fontSize: 20),
                 decoration: const InputDecoration(
                     hintText: "Task", border: InputBorder.none),

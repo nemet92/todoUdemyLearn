@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todoudemy/model/task_model.dart';
 
 class TaskItem extends StatefulWidget {
@@ -10,6 +11,13 @@ class TaskItem extends StatefulWidget {
 }
 
 class _TaskItemState extends State<TaskItem> {
+  final TextEditingController _taskNameController = TextEditingController();
+  @override
+  void initState() {
+    _taskNameController.text = widget.task.name;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,18 +25,47 @@ class _TaskItemState extends State<TaskItem> {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(8), blurRadius: 10)
-          ]),
+          boxShadow: const [BoxShadow(color: Colors.black, blurRadius: 10)]),
       child: ListTile(
         leading: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              widget.task.isCompleted = !widget.task.isCompleted;
+              setState(() {});
+            },
             child: Container(
-                decoration: BoxDecoration(
-                    color:
-                        widget.task.isCompleted ? Colors.green : Colors.white),
-                child: const Icon(Icons.check))),
-        title: Text(widget.task.name),
+              decoration: BoxDecoration(
+                  color: widget.task.isCompleted ? Colors.green : Colors.white,
+                  border: Border.all(color: Colors.white, width: 0.8),
+                  //bura bax
+                  shape: BoxShape.circle),
+              child: const Icon(
+                Icons.check,
+                color: Colors.white,
+              ),
+            )),
+        title: widget.task.isCompleted
+            ? Text(
+                widget.task.name,
+                style: const TextStyle(
+                    decoration: TextDecoration.lineThrough, color: Colors.grey),
+              )
+            : TextField(
+                textInputAction: TextInputAction.done,
+                autofocus: true,
+                minLines: 1,
+                maxLines: null,
+                controller: _taskNameController,
+                decoration: const InputDecoration(border: InputBorder.none),
+                onSubmitted: ((yeniDeger) {
+                  if (yeniDeger.length > 3) {
+                    widget.task.name = yeniDeger;
+                  }
+                }),
+              ),
+        trailing: Text(
+          DateFormat('hh:mm a').format(widget.task.createdAt),
+          style: const TextStyle(fontSize: 14, color: Colors.green),
+        ),
       ),
     );
   }
