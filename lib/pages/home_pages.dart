@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:todoudemy/data/local_stroage.dart';
+import 'package:todoudemy/main.dart';
 import 'package:todoudemy/model/task_model.dart';
 import 'package:todoudemy/widget/task_list_item.dart';
 
@@ -11,11 +13,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Task> _allTasks;
+  late List<dynamic> _allTasks;
+  late LocalStorage _localStorage;
+
   @override
   void initState() {
+    _localStorage = locator<LocalStorage>();
     _allTasks = <Task>[];
-    _allTasks.add(Task.create(name: "Deneme", createdAt: DateTime.now()));
+    // _allTasks.add(Task.create(name: "Deneme", createdAt: DateTime.now()));
+    _getAllTaskFromDb();
 
     super.initState();
   }
@@ -64,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       onDismissed: ((direction) {
                         _allTasks.removeAt(index);
+                        _localStorage.deleteTask(task: oankiListeElemani);
                         setState(() {});
                       }),
                       key: Key(oankiListeElemani.id),
@@ -96,10 +103,12 @@ class _HomePageState extends State<HomePage> {
                     DatePicker.showTimePicker(
                       context,
                       showSecondsColumn: false,
-                      onConfirm: (time) {
+                      onConfirm: (time) async {
                         final yeniEklenecekGorev =
                             Task.create(name: value, createdAt: time);
-                        _allTasks.add(yeniEklenecekGorev);
+                        // _allTasks.add(yeniEklenecekGorev);
+                        _allTasks.insert(0, yeniEklenecekGorev);
+                        await _localStorage.addTask(task: yeniEklenecekGorev);
                         setState(() {});
                       },
                     );
@@ -109,5 +118,10 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         });
+  }
+
+  _getAllTaskFromDb() async {
+    _allTasks = await _localStorage.getAllTask();
+    setState(() {});
   }
 }
