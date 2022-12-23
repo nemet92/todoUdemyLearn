@@ -3,6 +3,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:todoudemy/data/local_stroage.dart';
 import 'package:todoudemy/main.dart';
 import 'package:todoudemy/model/task_model.dart';
+import 'package:todoudemy/pages/custom_search_delegate.dart';
 import 'package:todoudemy/widget/task_list_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<dynamic> _allTasks;
+  late List<Task> _allTasks;
   late LocalStorage _localStorage;
 
   @override
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: GestureDetector(
             onTap: () {
-              _showBottomAddTaskSheet(context);
+              _showBottomAddTaskSheet();
             },
             child: const Text(
               "Bugun neler edecesin?",
@@ -41,10 +42,14 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           actions: [
-            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             IconButton(
                 onPressed: () {
-                  _showBottomAddTaskSheet(context);
+                  _showSearchPage();
+                },
+                icon: const Icon(Icons.search)),
+            IconButton(
+                onPressed: () {
+                  _showBottomAddTaskSheet();
                 },
                 icon: const Icon(Icons.add))
           ],
@@ -83,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               ));
   }
 
-  _showBottomAddTaskSheet(BuildContext context) {
+  _showBottomAddTaskSheet() {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -120,8 +125,14 @@ class _HomePageState extends State<HomePage> {
         });
   }
 
-  _getAllTaskFromDb() async {
+  void _getAllTaskFromDb() async {
     _allTasks = await _localStorage.getAllTask();
     setState(() {});
+  }
+
+  void _showSearchPage() async {
+    await showSearch(
+        context: context, delegate: CustomSearchDelegate(allTask: _allTasks));
+    _getAllTaskFromDb();
   }
 }
