@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:todoudemy/data/local_stroage.dart';
 import 'package:todoudemy/main.dart';
@@ -47,15 +48,15 @@ class CustomSearchDelegate extends SearchDelegate {
               return Dismissible(
                   background: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.delete,
                         color: Colors.red,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 8,
                       ),
-                      Text("Gorev silindi")
+                      const Text("remove_task").tr()
                     ],
                   ),
                   onDismissed: ((direction) async {
@@ -68,8 +69,8 @@ class CustomSearchDelegate extends SearchDelegate {
                     task: oankiListeElemani,
                   ));
             })
-        : const Center(
-            child: Text("Axtardiginizi bulamadiq"),
+        : Center(
+            child: const Text('search_not_found').tr(),
           );
   }
 

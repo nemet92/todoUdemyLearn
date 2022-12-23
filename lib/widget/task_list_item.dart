@@ -40,7 +40,7 @@ class _TaskItemState extends State<TaskItem> {
             },
             child: Container(
               decoration: BoxDecoration(
-                  color: widget.task.isCompleted ? Colors.green : Colors.white,
+                  color: widget.task.isCompleted ? Colors.green : Colors.grey,
                   border: Border.all(color: Colors.white, width: 0.8),
                   //bura bax
                   shape: BoxShape.circle),
@@ -70,8 +70,8 @@ class _TaskItemState extends State<TaskItem> {
                 }),
               ),
         trailing: Text(
-          DateFormat('hh:mm a').format(widget.task.createdAt),
-          style: const TextStyle(fontSize: 14, color: Colors.green),
+          DateFormat('hh:mm a  d/M/y').format(widget.task.createdAt),
+          style: const TextStyle(fontSize: 12, color: Colors.green),
         ),
       ),
     );

@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:todoudemy/data/local_stroage.dart';
+import 'package:todoudemy/helper/translations_helper.dart';
 import 'package:todoudemy/main.dart';
 import 'package:todoudemy/model/task_model.dart';
 import 'package:todoudemy/pages/custom_search_delegate.dart';
@@ -37,9 +39,9 @@ class _HomePageState extends State<HomePage> {
               _showBottomAddTaskSheet();
             },
             child: const Text(
-              "Bugun neler edecesin?",
+              "title",
               style: TextStyle(color: Colors.black),
-            ),
+            ).tr(),
           ),
           actions: [
             IconButton(
@@ -62,15 +64,15 @@ class _HomePageState extends State<HomePage> {
                   return Dismissible(
                       background: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
+                        children: [
+                          const Icon(
                             Icons.delete,
                             color: Colors.red,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
-                          Text("Gorev silindi")
+                          const Text("remove_task").tr()
                         ],
                       ),
                       onDismissed: ((direction) {
@@ -83,8 +85,8 @@ class _HomePageState extends State<HomePage> {
                         task: oankiListeElemani,
                       ));
                 })
-            : const Center(
-                child: Text("Hadi gorev ekle"),
+            : Center(
+                child: const Text("empty").tr(),
               ));
   }
 
@@ -100,13 +102,14 @@ class _HomePageState extends State<HomePage> {
               title: TextField(
                 autofocus: true,
                 style: const TextStyle(fontSize: 20),
-                decoration: const InputDecoration(
-                    hintText: "Task", border: InputBorder.none),
+                decoration: InputDecoration(
+                    hintText: "add_task".tr(), border: InputBorder.none),
                 onSubmitted: ((value) {
                   Navigator.of(context).pop();
                   if (value.length > 3) {
                     DatePicker.showTimePicker(
                       context,
+                      locale: TranslationHelper.getDeviceLanguage(context),
                       showSecondsColumn: false,
                       onConfirm: (time) async {
                         final yeniEklenecekGorev =
